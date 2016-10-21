@@ -130,7 +130,7 @@ The dispatcher itself::
 
     root:~# cp /usr/local/src/opm/wh_nagios/bin/nagios_dispatcher.pl /usr/local/bin
     
-    **If your operating system uses systemd**
+**If your operating system uses systemd**
     
     Slight change to the nagios_dispatcher.cfg file::
 
