@@ -125,12 +125,50 @@ The dispatcher itself::
     service_filter = /^$/ # Empty service
     label_filter = /^$/ # Empty label
     EOF
-
-    root:~# chown nagios /usr/local/etc/nagios_dispatcher.conf
-
-Install the nagios_dispatcher.pl file into the /usr/local/bin/ directory::
+    
+    Install the nagios_dispatcher.pl file into the /usr/local/bin/ directory::
 
     root:~# cp /usr/local/src/opm/wh_nagios/bin/nagios_dispatcher.pl /usr/local/bin
+    
+    **If your operating system uses systemd**
+    The dispatcher itself::
+
+    root:~# mkdir -p /usr/local/etc/
+    root:~# cat <<EOF > /usr/local/etc/nagios_dispatcher.conf
+    daemon=1
+    directory=/var/lib/nagios3/spool/perfdata/
+    frequency=5
+    db_connection_string=dbi:Pg:dbname=opm;host=127.0.0.1
+    db_user=YOUR_USER
+    db_password=YOUR_PASS
+    debug=0
+    syslog=1
+    hostname_filter = /^$/ # Empty hostname. Never happens
+    service_filter = /^$/ # Empty service
+    label_filter = /^$/ # Empty label
+    EOF
+
+    root:~# chown nagios /usr/local/etc/nagios_dispatcher.conf
+    
+Create the file /etc/systemd/system/nagios_dispatcher.service with the following content:
+    
+    [Unit]
+    Description=Nagios Dispatcher Service
+    After=network.target
+
+    [Service]
+    Type=simple
+    User=nagios
+    ExecStart=/usr/local/bin/nagios_dispatcher.pl -c /usr/local/etc/nagios_dispatcher.conf
+    Restart=on-abort
+
+
+    [Install]
+    WantedBy=multi-user.target
+    
+Now start the service:
+    
+    systemctl start nagios_dispatcher
 
 **If your operating system uses inittab**
 
