@@ -132,7 +132,7 @@ The dispatcher itself::
     
 **If your operating system uses systemd**
     
-    Slight change to the nagios_dispatcher.cfg file::
+Slight change to the nagios_dispatcher.cfg file::
 
     root:~# mkdir -p /usr/local/etc/
     root:~# cat <<EOF > /usr/local/etc/nagios_dispatcher.conf
